@@ -79,7 +79,6 @@ const _voidMethods = [
   'showRewardedAd',
   'showRewardedVideo',
   'showBanner',
-  'grantGdprConsent',
   'showCustomRateAppPopup',
   'showRateAppPopup',
   'disablePremium',
