@@ -37,9 +37,11 @@ Future<void> _patchAdMethods(File file) async {
     if (bodyStart != null && line == '.end method') {
       changed = true;
       lines.removeRange(bodyStart, i);
-      lines.insert(bodyStart, '    return-void');
-      lines.insert(bodyStart, '    ');
-      lines.insert(bodyStart, '    .locals 0');
+      lines.insertAll(bodyStart, [
+        '    .locals 0',
+        '    ',
+        '    return-void',
+      ]);
     }
   }
 
@@ -49,7 +51,7 @@ Future<void> _patchAdMethods(File file) async {
   await file.writeAsString(lines.join('\n'));
 }
 
-// Known methods we want to remove that return void
+/// Known methods we want to remove that return void
 const _voidMethods = [
   'loadInterstitialAd',
   'loadRewardedAd',
