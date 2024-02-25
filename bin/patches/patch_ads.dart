@@ -10,7 +10,7 @@ Future<void> _patchAdMethods(File file) async {
 
   bool changed = false;
 
-  // The body start line number of the current method to patch
+  /// The body start line number of the current method to patch
   int? bodyStart;
 
   line_loop:
@@ -34,13 +34,19 @@ Future<void> _patchAdMethods(File file) async {
     }
 
     if (bodyStart != null && line == '.end method') {
-      changed = true;
-      lines.removeRange(bodyStart, i);
-      lines.insertAll(bodyStart, [
+      const replacement = [
         '    .locals 0',
         '    ',
         '    return-void',
-      ]);
+      ];
+
+      changed = true;
+      lines.removeRange(bodyStart, i);
+      lines.insertAll(bodyStart, replacement);
+
+      i = bodyStart + replacement.length + 1;
+      bodyStart = null;
+      continue line_loop;
     }
   }
 
