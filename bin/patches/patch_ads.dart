@@ -26,11 +26,10 @@ Future<void> _patchAdMethods(File file) async {
       if (!line.endsWith(')V')) continue;
 
       for (final voidMethod in _voidMethods) {
-        if (line.startsWith('.method public $voidMethod') ||
-            line.startsWith('.method public static $voidMethod')) {
-          bodyStart = i + 1;
-          continue line_loop;
-        }
+        if (!line.contains(' $voidMethod(')) continue;
+
+        bodyStart = i + 1;
+        continue line_loop;
       }
     }
 
@@ -60,4 +59,5 @@ const _voidMethods = [
   'showInterstitial',
   'showRewardedAd',
   'showRewardedVideo',
+  'grantGdprConsent',
 ];
