@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:pool/pool.dart';
+
 import 'src/patch_file.dart';
 
 final originalApkFile = File('original.apk');
@@ -50,7 +52,12 @@ Future<void> runPatches() async {
 
   print('Running patches on ${smaliFiles.length} smali files...');
 
-  await Future.wait(smaliFiles.map(patchFile));
+  final pool = Pool(16);
+  await Future.wait(smaliFiles.map(
+    (file) => pool.withResource(
+      () => patchFile(file),
+    ),
+  ));
 }
 
 Future<void> recompile() async {
