@@ -47,7 +47,9 @@ Future<void> patchFile(File file) async {
           continue line_loop;
         }
       } else if (line.endsWith(')I')) {
-        if (line.contains(' getVip_expire_at(')) {
+        for (final bigNumberMethod in _bigNumberMethods) {
+          if (!line.contains(' $bigNumberMethod(')) continue;
+
           bodyStart = i + 1;
           replacement = MethodBodies.returnABigInteger;
           continue line_loop;
@@ -110,4 +112,11 @@ const _falseMethods = [
   'isInterstitialAvailable',
   'isRewardedAvailable',
   'isRewardedPlacementAvailable',
+];
+
+/// Known methods that we want to replace with
+/// [MethodBodies.returnABigInteger]
+const _bigNumberMethods = [
+  'getVip_expire_at',
+  'getSubscriptionExpirationTimestamp',
 ];
