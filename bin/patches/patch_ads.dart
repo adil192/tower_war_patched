@@ -45,6 +45,7 @@ Future<void> _patchAdMethods(File file) async {
 
   if (!changed) return;
 
+  print('Patched ${file.path}');
   await file.writeAsString(lines.join('\n'));
 }
 

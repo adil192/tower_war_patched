@@ -28,11 +28,13 @@ Future<void> prereq() async {
 
 Future<void> cleanup() async {
   if (decompiledDir.existsSync()) {
+    print('Cleaning up old files...');
     await decompiledDir.delete(recursive: true);
   }
 }
 
 Future<void> decompile() async {
+  print('Decompiling original.apk...');
   final process = await Process.start('apktool', ['d', originalApkFile.path]);
   stdout.addStream(process.stdout);
   stderr.addStream(process.stderr);
@@ -46,10 +48,13 @@ Future<void> runPatches() async {
       .where((file) => file.path.endsWith('.smali'))
       .toList();
 
+  print('Running patches on ${smaliFiles.length} smali files...');
+
   await patchAds(smaliFiles);
 }
 
 Future<void> recompile() async {
+  print('Recompiling patched files...');
   final process = await Process.start('apktool', ['b', decompiledDir.path]);
   stdout.addStream(process.stdout);
   stderr.addStream(process.stderr);
@@ -57,6 +62,7 @@ Future<void> recompile() async {
 }
 
 Future<void> zipalign() async {
+  print('Running zipalign...');
   final process = await Process.start('zipalign', [
     '-f',
     '-p',
@@ -70,6 +76,7 @@ Future<void> zipalign() async {
 }
 
 Future<void> sign() async {
+  print('Signing patched.apk...');
   final process = await Process.start('apksigner', [
     'sign',
     '--ks',
