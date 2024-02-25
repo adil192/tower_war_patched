@@ -19,7 +19,7 @@ Future<void> patchFile(File file) async {
 
     if (line.isEmpty || line[0] != '.') continue;
 
-    if (line.startsWith('.method public')) {
+    if (line.startsWith('.method public') && !line.contains(' abstract ')) {
       bodyStart = null;
 
       if (line.endsWith(')V')) {
