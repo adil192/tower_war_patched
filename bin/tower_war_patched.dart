@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'patches/patch_ads.dart';
+import 'src/patch_file.dart';
 
 final originalApkFile = File('original.apk');
 final decompiledDir = Directory('original');
@@ -50,7 +50,7 @@ Future<void> runPatches() async {
 
   print('Running patches on ${smaliFiles.length} smali files...');
 
-  await patchAds(smaliFiles);
+  await Future.wait(smaliFiles.map(patchFile));
 }
 
 Future<void> recompile() async {
