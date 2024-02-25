@@ -20,4 +20,13 @@ abstract class MethodBodies {
     '    ',
     '    return v0',
   ];
+
+  static const returnABigInteger = [
+    '    .locals 1',
+    '    ',
+    // biggest signed 32-bit integer
+    '    const v0, 0x7fffffff',
+    '    ',
+    '    return v0',
+  ];
 }

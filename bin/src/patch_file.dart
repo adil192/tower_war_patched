@@ -46,6 +46,12 @@ Future<void> patchFile(File file) async {
           replacement = MethodBodies.returnFalse;
           continue line_loop;
         }
+      } else if (line.endsWith(')I')) {
+        if (line.contains(' getVip_expire_at(')) {
+          bodyStart = i + 1;
+          replacement = MethodBodies.returnABigInteger;
+          continue line_loop;
+        }
       }
     }
 
@@ -82,6 +88,8 @@ const _voidMethods = [
   'showCustomRateAppPopup',
   'showRateAppPopup',
   'disablePremium',
+  'setPremium',
+  'setVip_expire_at',
 ];
 
 /// Known methods we want to replace with
