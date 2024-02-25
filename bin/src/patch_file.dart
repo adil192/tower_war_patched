@@ -13,6 +13,9 @@ Future<void> patchFile(File file) async {
   /// The target method body with which to replace the original
   List<String> replacement = const [];
 
+  /// The target method's name
+  String? methodName;
+
   line_loop:
   for (int i = 0; i < lines.length; i++) {
     final line = lines[i];
@@ -28,6 +31,7 @@ Future<void> patchFile(File file) async {
 
           bodyStart = i + 1;
           replacement = MethodBodies.returnVoid;
+          methodName = voidMethod;
           continue line_loop;
         }
       } else if (line.endsWith(')Z')) {
@@ -36,6 +40,7 @@ Future<void> patchFile(File file) async {
 
           bodyStart = i + 1;
           replacement = MethodBodies.returnTrue;
+          methodName = trueMethod;
           continue line_loop;
         }
 
@@ -44,6 +49,7 @@ Future<void> patchFile(File file) async {
 
           bodyStart = i + 1;
           replacement = MethodBodies.returnFalse;
+          methodName = falseMethod;
           continue line_loop;
         }
       } else if (line.endsWith(')I')) {
@@ -52,6 +58,7 @@ Future<void> patchFile(File file) async {
 
           bodyStart = i + 1;
           replacement = MethodBodies.returnABigInteger;
+          methodName = bigNumberMethod;
           continue line_loop;
         }
       }
@@ -59,6 +66,8 @@ Future<void> patchFile(File file) async {
 
     if (bodyStart != null && line == '.end method') {
       changed = true;
+      print('Patching $methodName in ${file.path}');
+
       lines.removeRange(bodyStart, i);
       lines.insertAll(bodyStart, replacement);
 
@@ -70,7 +79,6 @@ Future<void> patchFile(File file) async {
 
   if (!changed) return;
 
-  print('Patched ${file.path}');
   await file.writeAsString(lines.join('\n'), flush: true);
 }
 
