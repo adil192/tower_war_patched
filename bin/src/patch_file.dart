@@ -62,6 +62,15 @@ Future<void> patchFile(File file) async {
           continue line_loop;
         }
       }
+
+      for (final entry in _otherMethods.entries) {
+        if (!line.contains(' ${entry.key}(')) continue;
+
+        bodyStart = i + 1;
+        replacement = entry.value;
+        methodName = entry.key;
+        continue line_loop;
+      }
     }
 
     if (bodyStart != null && line == '.end method') {
@@ -102,7 +111,6 @@ const _voidMethods = [
   'showBanner',
   'showCustomRateAppPopup',
   'showRateAppPopup',
-  'disablePremium',
   'setPremium',
   'setVip_expire_at',
 ];
@@ -129,3 +137,7 @@ const _bigNumberMethods = [
   'getVip_expire_at',
   'getSubscriptionExpirationTimestamp',
 ];
+
+const _otherMethods = <String, List<String>>{
+  'disablePremium': MethodBodies.enablePremium,
+};

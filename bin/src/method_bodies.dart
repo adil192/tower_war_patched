@@ -29,4 +29,19 @@ abstract class MethodBodies {
     '    ',
     '    return v0',
   ];
+
+  /// Equivalent to the method body of the original `enablePremium` method
+  /// in `smali_classes7/saygames/bridge/unity/SayKitBridge.smali`.
+  ///
+  /// This just calls the `enablePremium` method in
+  /// `smali_classes7/saygames/saykit/SayKit.smali`.
+  static const enablePremium = [
+    '    .locals 0',
+    '    .annotation runtime Lkotlin/jvm/JvmStatic;',
+    '    .end annotation',
+    '    ',
+    '    invoke-static {}, Lsaygames/saykit/SayKit;->enablePremium()V',
+    '    ',
+    '    return-void',
+  ];
 }
