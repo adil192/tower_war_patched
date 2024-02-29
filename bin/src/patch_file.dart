@@ -112,6 +112,7 @@ const _voidMethods = [
 const _trueMethods = [
   'isPremium',
   'getRateAppStatus',
+  'eligibleQueryPurchaseHistory',
 ];
 
 /// Known methods we want to replace with
