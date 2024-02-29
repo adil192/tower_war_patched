@@ -13,6 +13,9 @@ Future<void> patchFile(File file) async {
   /// The target method body with which to replace the original
   List<String> replacement = const [];
 
+  /// Code to inject into the beginning of the method body
+  List<String> injection = const [];
+
   /// The target method's name
   String? methodName;
 
@@ -22,8 +25,20 @@ Future<void> patchFile(File file) async {
 
     if (line.isEmpty || line[0] != '.') continue;
 
-    if (line.startsWith('.method public') && !line.contains(' abstract ')) {
+    if (line.startsWith('.method ') && !line.contains(' abstract ')) {
       bodyStart = null;
+      replacement = const [];
+      injection = const [];
+
+      // Check if we have something to inject into the method.
+      // We may also want to replace the method body first.
+      for (final entry in _injectedMethods.entries) {
+        if (!line.contains(' ${entry.key}(')) continue;
+
+        bodyStart = i + 1;
+        injection = entry.value;
+        methodName = entry.key;
+      }
 
       if (line.endsWith(')V')) {
         for (final voidMethod in _voidMethods) {
@@ -77,10 +92,20 @@ Future<void> patchFile(File file) async {
       changed = true;
       print('Patching $methodName in ${file.path}');
 
-      lines.removeRange(bodyStart, i);
-      lines.insertAll(bodyStart, replacement);
+      if (replacement.isNotEmpty) {
+        lines.removeRange(bodyStart, i);
+        lines.insertAll(bodyStart, replacement);
+        i = bodyStart + replacement.length + 1;
+      }
+      if (injection.isNotEmpty) {
+        // We assume lines[bodyStart] is the ".locals 0" line,
+        // so we insert the injection after that line.
+        lines.insertAll(bodyStart + 1, injection);
+        // Add a blank line before the injection
+        lines.insert(bodyStart + 1, '    ');
+        i += injection.length + 1;
+      }
 
-      i = bodyStart + replacement.length + 1;
       bodyStart = null;
       continue line_loop;
     }
@@ -144,4 +169,12 @@ const _bigNumberMethods = [
 
 const _otherMethods = <String, List<String>>{
   'disablePremium': MethodBodies.enablePremium,
+};
+
+/// We want to inject some code into the beginning
+/// of the existing method body.
+const _injectedMethods = <String, List<String>>{
+  'isInterstitialAvailable': MethodBodies.injectEnablePremium,
+  'isRewardedAvailable': MethodBodies.injectEnablePremium,
+  'isRewardedPlacementAvailable': MethodBodies.injectEnablePremium,
 };

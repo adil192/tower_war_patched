@@ -44,4 +44,10 @@ abstract class MethodBodies {
     '    ',
     '    return-void',
   ];
+
+  /// Calls the `enablePremium` method.
+  /// For injecting into the SayKitBridgeActivity.smali file.
+  static const injectEnablePremium = [
+    '    invoke-static {}, Lsaygames/saykit/SayKit;->enablePremium()V',
+  ];
 }
