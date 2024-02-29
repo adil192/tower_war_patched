@@ -109,7 +109,6 @@ const _voidMethods = [
   'showRewardedInterstitialAd',
   'showAppOpenAd',
   'showBanner',
-  'showCustomRateAppPopup',
   'showRateAppPopup',
   'setPremium',
   'setVip_expire_at',
@@ -121,6 +120,9 @@ const _trueMethods = [
   'isPremium',
   'getRateAppStatus',
   'eligibleQueryPurchaseHistory',
+  'showRewarded',
+  'showInterstitial',
+  'showInterstitialWithPopup',
 ];
 
 /// Known methods we want to replace with
@@ -129,6 +131,8 @@ const _falseMethods = [
   'isInterstitialAvailable',
   'isRewardedAvailable',
   'isRewardedPlacementAvailable',
+  'showCustomRateAppPopup',
+  'showRateAppPopup',
 ];
 
 /// Known methods that we want to replace with
