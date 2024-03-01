@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:pool/pool.dart';
 
-import 'src/patch_file.dart';
+import 'src/patch_smali.dart';
 
 final originalApkFile = File('original.apk');
 final decompiledDir = Directory('original');
@@ -55,7 +55,7 @@ Future<void> runPatches() async {
   final pool = Pool(16);
   await Future.wait(smaliFiles.map(
     (file) => pool.withResource(
-      () => patchFile(file),
+      () => patchSmali(file),
     ),
   ));
 }

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'method_bodies.dart';
 
-Future<void> patchFile(File file) async {
+Future<void> patchSmali(File file) async {
   final lines = await file.readAsLines();
 
   bool changed = false;
