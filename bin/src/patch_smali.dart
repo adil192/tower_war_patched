@@ -120,18 +120,18 @@ Future<void> patchSmali(File file) async {
 /// [MethodBodies.returnVoid]
 const _voidMethods = [
   'loadInterstitialAd',
-  'loadRewardedAd',
-  'loadRewardedVideo',
+  // 'loadRewardedAd',
+  // 'loadRewardedVideo',
   'showAd',
   'showFullscreenAd',
   'showInterstitial',
   'showInterstitialAd',
   'showInterstitialWithPopup',
-  'showRewarded',
-  'showRewardedAd',
-  'showRewardedVideo',
-  'showRewardedVideoAd',
-  'showRewardedInterstitialAd',
+  // 'showRewarded',
+  // 'showRewardedAd',
+  // 'showRewardedVideo',
+  // 'showRewardedVideoAd',
+  // 'showRewardedInterstitialAd',
   'showAppOpenAd',
   'showBanner',
   'showRateAppPopup',
@@ -145,7 +145,7 @@ const _trueMethods = [
   'isPremium',
   'getRateAppStatus',
   'eligibleQueryPurchaseHistory',
-  'showRewarded',
+  // 'showRewarded',
   'showInterstitial',
   'showInterstitialWithPopup',
 ];
@@ -154,8 +154,8 @@ const _trueMethods = [
 /// [MethodBodies.returnFalse]
 const _falseMethods = [
   'isInterstitialAvailable',
-  'isRewardedAvailable',
-  'isRewardedPlacementAvailable',
+  // 'isRewardedAvailable',
+  // 'isRewardedPlacementAvailable',
   'showCustomRateAppPopup',
   'showRateAppPopup',
 ];
