@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:pool/pool.dart';
 
 import 'src/patch_json.dart';
+import 'src/patch_manifest.dart';
 import 'src/patch_smali.dart';
 
 final originalApkFile = File('original.apk');
@@ -57,6 +58,7 @@ Future<void> runPatches() async {
   await Future.wait([
     for (final file in smaliFiles) pool.withResource(() => patchSmali(file)),
     pool.withResource(patchJson),
+    pool.withResource(patchAndroidManifest),
   ]);
   await pool.close();
 }

@@ -46,6 +46,7 @@ Future<void> patchJson() async {
   }
   json['game_settings']['tokens_upgrade_list'] = jsonEncode(tokensUpgradeList);
 
+  print('Patching game_settings in $jsonFile...');
   await jsonFile.writeAsString(jsonEncode(json));
 }
 
