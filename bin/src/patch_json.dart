@@ -51,7 +51,7 @@ Future<void> patchJson() async {
 }
 
 Future<File> _findJsonFile() async {
-  final expectedFile = File('original/assets/saykit_mlltrna_1.18.7.json');
+  final expectedFile = File('original/assets/saykit_mlltrna_1.19.1.json');
   if (expectedFile.existsSync()) return expectedFile;
 
   await for (var entity in Directory('original/assets/').list()) {
@@ -59,7 +59,7 @@ Future<File> _findJsonFile() async {
 
     final fileName = entity.path.split('/').last;
     if (fileName.startsWith('saykit_mlltrna_') && fileName.endsWith('.json')) {
-      print('Warning: $expectedFile not found!'
+      print('Warning: $expectedFile not found! '
           'Using $fileName instead.');
       return entity;
     }

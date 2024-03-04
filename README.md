@@ -11,6 +11,6 @@ for many (un-minified) Android games.
 ## Usage
 
 1. Clone this repo.
-2. Download the unpatched APK from a website like [apkcombo](https://apkcombo.com/downloader#package=games.vaveda.militaryoverturn&device=phone&sdk=32&arches=arm64-v8a) into the repo directory and rename it to `original.apk`.
+2. Download the unpatched APK from a website like [apkcombo](https://apkcombo.com/tower-war-tactical-conquest/games.vaveda.militaryoverturn/download/apk) into the repo directory and rename it to `original.apk`.
 3. Run `dart run` in a terminal.
 4. You should get a `patched.apk` file in the repo directory.
