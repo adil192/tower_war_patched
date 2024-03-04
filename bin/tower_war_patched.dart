@@ -101,6 +101,8 @@ Future<void> sign() async {
 }
 
 void main(List<String> arguments) async {
+  final stopwatch = Stopwatch()..start();
+
   await prereq();
   await cleanup();
   await decompile();
@@ -108,4 +110,7 @@ void main(List<String> arguments) async {
   await recompile();
   await zipalign();
   await sign();
+
+  stopwatch.stop();
+  print('All done in ${stopwatch.elapsed.inSeconds}s!');
 }
