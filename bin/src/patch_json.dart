@@ -19,6 +19,35 @@ Future<void> patchJson() async {
   json['game_settings']['gold_chest'] = jsonEncode(goldChest);
   json['game_settings']['open_ten_chests_price'] = 54; // from 540
 
+  json['game_settings']['level_interstitial_first_level'] = 1000000; // from 14
+  json['game_settings']['level_interstitial_max_per_level'] = 1; // from 2
+  json['game_settings']['level_interstitial_progress_min'] = 0.0; // from 0.2
+  json['game_settings']['level_interstitial_progress_max'] = 0.1; // from 0.8
+  json['game_settings']['level_interstitial_show_adbrake_screen'] = 0; // from 1
+
+  final personalizationIcons =
+      jsonDecode(json['game_settings']['personalization_unique_icons']) as List;
+  for (final icon in personalizationIcons) {
+    icon['Price'] = (int.parse(icon['Price']) ~/ 10).toString();
+  }
+  json['game_settings']['personalization_unique_icons'] =
+      jsonEncode(personalizationIcons);
+
+  final rarityUpgradeData =
+      jsonDecode(json['game_settings']['rarity_upgrade_data']) as List;
+  for (final upgrade in rarityUpgradeData) {
+    upgrade['StartPrice'] = (int.parse(upgrade['StartPrice']) ~/ 10).toString();
+    upgrade['AddPriceByLevel'] =
+        (int.parse(upgrade['AddPriceByLevel']) ~/ 10).toString();
+  }
+  json['game_settings']['rarity_upgrade_data'] = jsonEncode(rarityUpgradeData);
+
+  json['game_settings']['rate_us_level_delay'] = 1000000; // from 50
+  json['game_settings']['show_offers_delay'] = 1000000; // from 300
+  json['game_settings']['show_rateus_after_level'] = 1000000; // from 6
+  json['game_settings']['show_bomb_button_free_count'] = 1000000; // from 0
+  json['game_settings']['show_bomb_price'] = 50; // from 250
+
   final itemsOffer =
       jsonDecode(json['game_settings']['show_items_offer_in_shop']) as JsonMap;
   itemsOffer['IsEnable'] = 1; // from 0
@@ -36,8 +65,23 @@ Future<void> patchJson() async {
   final silverChest =
       jsonDecode(json['game_settings']['silver_chest']) as JsonMap;
   silverChest['ChestPrice'] = 2; // from 15
+  json['game_settings']['silver_chest'] = jsonEncode(silverChest);
 
-  json['summon_unit_price'] = 3; // from 25
+  final spinRewardList =
+      (jsonDecode(json['game_settings']['spin_reward_list']) as List)
+          .where((reward) {
+    if (reward['Type'] == 'Gold') return false;
+    if (reward['Type'] == 'Ruby') reward['Count'] *= 10;
+    return true;
+  }).toList();
+  jsonEncode(spinRewardList);
+
+  final summonList = (jsonDecode(json['game_settings']['summon_list']) as List)
+      .where((summon) => summon['RarityType'] != 'Grey')
+      .toList();
+  json['game_settings']['summon_list'] = jsonEncode(summonList);
+
+  json['game_settings']['summon_unit_price'] = 3; // from 25
 
   final tokensUpgradeList =
       jsonDecode(json['game_settings']['tokens_upgrade_list']) as List;
