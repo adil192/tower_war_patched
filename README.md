@@ -12,5 +12,6 @@ for many (un-minified) Android games.
 
 1. Clone this repo.
 2. Download the unpatched APK from a website like [apkcombo](https://apkcombo.com/tower-war-tactical-conquest/games.vaveda.militaryoverturn/download/apk) into the repo directory and rename it to `original.apk`.
-3. Run `dart run` in a terminal.
-4. You should get a `patched.apk` file in the repo directory.
+3. Run `dart pub get` in a terminal.
+4. Run `dart run` in a terminal.
+5. Install `patched.apk` on your Android device.

@@ -19,14 +19,19 @@ Future<void> prereq() async {
     throw 'apktool not found! Please install it from https://apktool.org/docs/install';
   }
 
+  final whichJava = await Process.run('which', ['java']);
+  if (whichJava.exitCode != 0) {
+    throw 'java not found! Please install it with e.g. sudo dnf install java-latest-openjdk';
+  }
+
   final whichApksigner = await Process.run('which', ['apksigner']);
   if (whichApksigner.exitCode != 0) {
-    throw 'apksigner not found! Please install it with e.g. sudo apt install apksigner';
+    throw 'apksigner not found! Please install the Android Build Tools and add them to your PATH';
   }
 
   final whichZipalign = await Process.run('which', ['zipalign']);
   if (whichZipalign.exitCode != 0) {
-    throw 'zipalign not found! Please install it with e.g. sudo apt install zipalign';
+    throw 'zipalign not found! Please install the Android Build Tools and add them to your PATH';
   }
 }
 
