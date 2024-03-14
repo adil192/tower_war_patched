@@ -2,6 +2,24 @@ import 'dart:io';
 
 import 'method_bodies.dart';
 
+/// The number of times a method is patched.
+/// The key is the method name with the type of return value,
+/// e.g. `isPremium()Z` or `loadInterstitialAd()V`.
+Map<String, int> _methodCounts = {
+  for (final voidMethod in _voidMethods) '$voidMethod()V': 0,
+  for (final trueMethod in _trueMethods) '$trueMethod()Zt': 0,
+  for (final falseMethod in _falseMethods) '$falseMethod()Zf': 0,
+  for (final bigNumberMethod in _bigNumberMethods) '$bigNumberMethod()I': 0,
+  for (final otherMethod in _otherMethods.keys) '$otherMethod()_': 0,
+};
+
+void printMethodCounts() {
+  print('Method counts:');
+  for (final entry in _methodCounts.entries) {
+    print('${entry.key}: ${entry.value}');
+  }
+}
+
 Future<void> patchSmali(File file) async {
   final lines = await file.readAsLines();
 
@@ -47,6 +65,7 @@ Future<void> patchSmali(File file) async {
           bodyStart = i + 1;
           replacement = MethodBodies.returnVoid;
           methodName = voidMethod;
+          _methodCounts.update('$voidMethod()V', (c) => c + 1);
           continue line_loop;
         }
       } else if (line.endsWith(')Z')) {
@@ -56,6 +75,7 @@ Future<void> patchSmali(File file) async {
           bodyStart = i + 1;
           replacement = MethodBodies.returnTrue;
           methodName = trueMethod;
+          _methodCounts.update('$trueMethod()Zt', (c) => c + 1);
           continue line_loop;
         }
 
@@ -65,6 +85,7 @@ Future<void> patchSmali(File file) async {
           bodyStart = i + 1;
           replacement = MethodBodies.returnFalse;
           methodName = falseMethod;
+          _methodCounts.update('$falseMethod()Zf', (c) => c + 1);
           continue line_loop;
         }
       } else if (line.endsWith(')I')) {
@@ -74,6 +95,7 @@ Future<void> patchSmali(File file) async {
           bodyStart = i + 1;
           replacement = MethodBodies.returnABigInteger;
           methodName = bigNumberMethod;
+          _methodCounts.update('$bigNumberMethod()I', (c) => c + 1);
           continue line_loop;
         }
       }
@@ -84,6 +106,7 @@ Future<void> patchSmali(File file) async {
         bodyStart = i + 1;
         replacement = entry.value;
         methodName = entry.key;
+        _methodCounts.update('${entry.key}()_', (c) => c + 1);
         continue line_loop;
       }
     }

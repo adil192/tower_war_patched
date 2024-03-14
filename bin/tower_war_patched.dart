@@ -66,6 +66,8 @@ Future<void> runPatches() async {
     pool.withResource(patchAndroidManifest),
   ]);
   await pool.close();
+
+  printMethodCounts();
 }
 
 Future<void> recompile() async {
