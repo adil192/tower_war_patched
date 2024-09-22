@@ -4,7 +4,13 @@ import 'dart:io';
 typedef JsonMap = Map<String, dynamic>;
 
 Future<void> patchJson() async {
-  final jsonFile = await _findJsonFile();
+  final File jsonFile;
+  try {
+    jsonFile = await _findJsonFile();
+  } catch (e) {
+    print(e);
+    return;
+  }
   final json = await jsonFile.readAsString().then(jsonDecode) as JsonMap;
 
   json['game_settings']['ad_banner_enable'] = 0;
