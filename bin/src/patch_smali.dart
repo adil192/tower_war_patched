@@ -178,6 +178,10 @@ const _falseMethods = [
   'isRewardedPlacementAvailable',
   'showCustomRateAppPopup',
   'showRateAppPopup',
+  'isRooted',
+  'isEmulator',
+  'isDebuggerAttached',
+  'isAppDebuggable',
 ];
 
 /// Known methods that we want to replace with
