@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:pool/pool.dart';
 
-import 'src/convert_xapk.dart';
+import 'src/apk_editor.dart';
 import 'src/globals.dart';
 import 'src/patch_json.dart';
 import 'src/patch_manifest.dart';
@@ -39,6 +39,7 @@ Future<void> prereq() async {
   if (!originalApkFile.existsSync()) {
     throw 'original.apk not found! Please download it from the link in the README.';
   }
+  await refactorApk(originalApkFile);
 }
 
 Future<void> cleanup() async {
