@@ -3,5 +3,9 @@ pubspec.lock
 
 original
 original.apk
+original.xapk
+
+xapk-to-apk
+.xapktoapk
 
 patched.apk*

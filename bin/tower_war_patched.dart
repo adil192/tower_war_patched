@@ -2,18 +2,16 @@ import 'dart:io';
 
 import 'package:pool/pool.dart';
 
+import 'src/convert_xapk.dart';
 import 'src/patch_json.dart';
 import 'src/patch_manifest.dart';
 import 'src/patch_smali.dart';
 
+final originalXapkFile = File('original.xapk');
 final originalApkFile = File('original.apk');
 final decompiledDir = Directory('original');
 
 Future<void> prereq() async {
-  if (!originalApkFile.existsSync()) {
-    throw 'original.apk not found! Please download it from the link in the README.';
-  }
-
   final whichApktool = await Process.run('which', ['apktool']);
   if (whichApktool.exitCode != 0) {
     throw 'apktool not found! Please install it from https://apktool.org/docs/install';
@@ -32,6 +30,13 @@ Future<void> prereq() async {
   final whichZipalign = await Process.run('which', ['zipalign']);
   if (whichZipalign.exitCode != 0) {
     throw 'zipalign not found! Please install the Android Build Tools and add them to your PATH';
+  }
+
+  if (originalXapkFile.existsSync()) {
+    await convertXapk(originalXapkFile);
+  }
+  if (!originalApkFile.existsSync()) {
+    throw 'original.apk not found! Please download it from the link in the README.';
   }
 }
 
