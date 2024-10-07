@@ -14,6 +14,17 @@ Future<void> patchAndroidManifest() async {
       changed = true;
       continue;
     }
+
+    lines[i] = line
+        .replaceAll(
+            'android:isSplitRequired="true"', 'android:isSplitRequired="false"')
+        .replaceAll(RegExp('android:requiredSplitTypes="[^"]*"'), '')
+        .replaceAll(RegExp('android:splitTypes="[^"]*"'), '');
+    if (lines[i] != line) {
+      print('Patched leftover split apk metadata in $file...');
+      changed = true;
+      continue;
+    }
   }
 
   if (!changed) return;
