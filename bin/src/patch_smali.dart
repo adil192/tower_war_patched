@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'globals.dart';
 import 'method_bodies.dart';
 
 /// The number of times a method is patched.
@@ -191,14 +192,18 @@ const _bigNumberMethods = [
   'getSubscriptionExpirationTimestamp',
 ];
 
-const _otherMethods = <String, List<String>>{
-  'disablePremium': MethodBodies.enablePremium,
+final _otherMethods = <String, List<String>>{
+  if (packageName == 'games.vaveda.militaryoverturn')
+    'disablePremium': MethodBodies.enablePremium,
 };
 
 /// We want to inject some code into the beginning
 /// of the existing method body.
-const _injectedMethods = <String, List<String>>{
-  'isInterstitialAvailable': MethodBodies.injectEnablePremium,
-  'isRewardedAvailable': MethodBodies.injectEnablePremium,
-  'isRewardedPlacementAvailable': MethodBodies.injectEnablePremium,
+final _injectedMethods = <String, List<String>>{
+  if (packageName == 'games.vaveda.militaryoverturn')
+    'isInterstitialAvailable': MethodBodies.injectEnablePremium,
+  if (packageName == 'games.vaveda.militaryoverturn')
+    'isRewardedAvailable': MethodBodies.injectEnablePremium,
+  if (packageName == 'games.vaveda.militaryoverturn')
+    'isRewardedPlacementAvailable': MethodBodies.injectEnablePremium,
 };

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:pool/pool.dart';
 
 import 'src/convert_xapk.dart';
+import 'src/globals.dart';
 import 'src/patch_json.dart';
 import 'src/patch_manifest.dart';
 import 'src/patch_smali.dart';
@@ -118,6 +119,11 @@ void main(List<String> arguments) async {
   await prereq();
   await cleanup();
   await decompile();
+  packageName = File('original/AndroidManifest.xml')
+      .readAsStringSync()
+      .split('<manifest')[1]
+      .split('package="')[1]
+      .split('"')[0];
   await runPatches();
   await recompile();
   await zipalign();
