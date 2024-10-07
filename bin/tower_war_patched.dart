@@ -33,7 +33,7 @@ Future<void> prereq() async {
   }
 
   if (originalXapkFile.existsSync()) {
-    await convertXapk(originalXapkFile);
+    await convertXapk(originalXapkFile, originalApkFile);
   }
   if (!originalApkFile.existsSync()) {
     throw 'original.apk not found! Please download it from the link in the README.';
