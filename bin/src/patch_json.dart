@@ -15,6 +15,11 @@ Future<void> patchJson() async {
 
   json['game_settings']['ad_banner_enable'] = 0;
 
+  final arenaConfig =
+      jsonDecode(json['game_settings']['arenaConfig']) as JsonMap;
+  _patchArenaConfig(arenaConfig);
+  json['game_settings']['arenaConfig'] = jsonEncode(arenaConfig);
+
   final battlePassRewards =
       jsonDecode(json['game_settings']['battle_pass_rewards']) as JsonMap;
   _patchBattlePassRewards(battlePassRewards);
@@ -118,6 +123,30 @@ Future<File> _findJsonFile() async {
   }
 
   throw '$expectedFile not found!';
+}
+
+void _patchArenaConfig(JsonMap arenaConfig) {
+  arenaConfig['challengeAttemptsCount'] = 50; // from 5
+  for (final rewardGroup in [
+    ...(arenaConfig['dailyArenaRewards'] as List<JsonMap>),
+    ...(arenaConfig['seasonArenaRewards'] as List<JsonMap>),
+  ]) {
+    final rewards = rewardGroup['rewards'] as List<JsonMap>;
+    for (final reward in rewards) {
+      // { "key": "currency", "amount": 2000, "rarity": 1, "currencyType": 7 }
+      reward['amount'] = (reward['amount'] as int) * 10;
+    }
+    if (!rewards.any((r) => r['currencyType'] == 5)) {
+      // Add some keys
+      rewards.add(
+          {"key": "currency", "amount": 1, "rarity": 1, "currencyType": 5});
+    }
+    if (!rewards.any((r) => r['currencyType'] == 2)) {
+      // Add some gems
+      rewards.add(
+          {"key": "currency", "amount": 25, "rarity": 1, "currencyType": 2});
+    }
+  }
 }
 
 void _patchBattlePassRewards(JsonMap battlePassRewards) {
