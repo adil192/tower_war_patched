@@ -125,6 +125,7 @@ void main(List<String> arguments) async {
       .split('<manifest')[1]
       .split('package="')[1]
       .split('"')[0];
+  print('Detected package name: $packageName');
   await runPatches();
   await recompile();
   await zipalign();

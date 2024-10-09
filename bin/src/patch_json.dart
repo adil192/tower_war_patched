@@ -22,6 +22,7 @@ Future<void> patchJson() async {
 
   final goldChest = jsonDecode(json['game_settings']['gold_chest']) as JsonMap;
   goldChest['ChestPrice'] = 6; // from 60
+  goldChest['TimeForFreeChest'] = 43200; // 12 hours from never
   json['game_settings']['gold_chest'] = jsonEncode(goldChest);
   json['game_settings']['open_ten_chests_price'] = 54; // from 540
 
@@ -71,6 +72,7 @@ Future<void> patchJson() async {
   final silverChest =
       jsonDecode(json['game_settings']['silver_chest']) as JsonMap;
   silverChest['ChestPrice'] = 2; // from 15
+  silverChest['TimeForFreeChest'] = 3600; // 1 hour from 24 hours
   json['game_settings']['silver_chest'] = jsonEncode(silverChest);
 
   final spinRewardList =
