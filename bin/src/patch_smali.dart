@@ -167,6 +167,7 @@ final _voidMethods = [
   'showBanner',
   'setPremium',
   'setVip_expire_at',
+  if (packageName == 'games.vaveda.militaryoverturn') 'setGameSettingsJson',
 ];
 
 /// Known methods we want to replace with
