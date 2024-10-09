@@ -40,7 +40,14 @@ Future<void> patchSmali(File file) async {
 
   line_loop:
   for (int i = 0; i < lines.length; i++) {
-    final line = lines[i];
+    final line = lines[i].replaceAll('disablePremium', 'enablePremium').replaceAll(
+        'invoke-static {}, Ljava/net/NetworkInterface;->getNetworkInterfaces()Ljava/util/Enumeration;',
+        'invoke-static {}, Ljava/util/Collections;->emptyEnumeration()Ljava/util/Enumeration;');
+    if (line != lines[i]) {
+      changed = true;
+      print('Patched ${lines[i]} to $line');
+      lines[i] = line;
+    }
 
     if (line.isEmpty || line[0] != '.') continue;
 
@@ -103,9 +110,11 @@ Future<void> patchSmali(File file) async {
 
       for (final entry in _otherMethods.entries) {
         if (!line.contains(' ${entry.key}(')) continue;
+        final (methodSuffix, body) = entry.value;
+        if (!line.endsWith(methodSuffix)) continue;
 
         bodyStart = i + 1;
-        replacement = entry.value;
+        replacement = body;
         methodName = entry.key;
         _methodCounts.update('${entry.key}()_', (c) => c + 1);
         continue line_loop;
@@ -142,7 +151,7 @@ Future<void> patchSmali(File file) async {
 
 /// Known methods we want to replace with
 /// [MethodBodies.returnVoid]
-const _voidMethods = [
+final _voidMethods = [
   'loadInterstitialAd',
   'loadRewardedAd',
   'loadRewardedVideo',
@@ -162,18 +171,19 @@ const _voidMethods = [
 
 /// Known methods we want to replace with
 /// [MethodBodies.returnTrue]
-const _trueMethods = [
+final _trueMethods = [
   'isPremium',
   'getRateAppStatus',
   'eligibleQueryPurchaseHistory',
   'showRewarded',
   'showInterstitial',
   'showInterstitialWithPopup',
+  if (packageName == 'games.vaveda.militaryoverturn') 'isActiveNetworkMetered',
 ];
 
 /// Known methods we want to replace with
 /// [MethodBodies.returnFalse]
-const _falseMethods = [
+final _falseMethods = [
   'isInterstitialAvailable',
   'isRewardedAvailable',
   'isRewardedPlacementAvailable',
@@ -183,27 +193,28 @@ const _falseMethods = [
   'isEmulator',
   'isDebuggerAttached',
   'isAppDebuggable',
+  if (packageName == 'games.vaveda.militaryoverturn') 'isNetworkConnected',
 ];
 
 /// Known methods that we want to replace with
 /// [MethodBodies.returnABigInteger]
-const _bigNumberMethods = [
+final _bigNumberMethods = [
   'getVip_expire_at',
   'getSubscriptionExpirationTimestamp',
 ];
 
-final _otherMethods = <String, List<String>>{
+final _otherMethods = <String, (String methodSuffix, List<String> body)>{
   if (packageName == 'games.vaveda.militaryoverturn')
-    'disablePremium': MethodBodies.enablePremium,
+    'getNetworkTypeFromConnectivityManager': (')I', MethodBodies.returnZero),
+  if (packageName == 'games.vaveda.militaryoverturn')
+    'getActiveNetworkInfo': (
+      ')Landroid/net/NetworkInfo;',
+      MethodBodies.returnNull
+    ),
+  if (packageName == 'games.vaveda.militaryoverturn')
+    'getConnectionType': (')Ljava/lang/String;', MethodBodies.returnZeroString),
 };
 
 /// We want to inject some code into the beginning
 /// of the existing method body.
-final _injectedMethods = <String, List<String>>{
-  if (packageName == 'games.vaveda.militaryoverturn')
-    'isInterstitialAvailable': MethodBodies.injectEnablePremium,
-  if (packageName == 'games.vaveda.militaryoverturn')
-    'isRewardedAvailable': MethodBodies.injectEnablePremium,
-  if (packageName == 'games.vaveda.militaryoverturn')
-    'isRewardedPlacementAvailable': MethodBodies.injectEnablePremium,
-};
+final _injectedMethods = <String, List<String>>{};
