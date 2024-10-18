@@ -181,6 +181,9 @@ final _trueMethods = [
   if (packageName == 'games.vaveda.militaryoverturn') 'isActiveNetworkMetered',
   'isRewardedAvailable',
   'isRewardedPlacementAvailable',
+  'getDisableAutoBanner',
+  'getDisableBanner',
+  'getDisableInterstitial',
 ];
 
 /// Known methods we want to replace with
