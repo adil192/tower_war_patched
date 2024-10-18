@@ -69,7 +69,7 @@ Future<void> runPatches() async {
   final pool = Pool(16);
   await Future.wait([
     for (final file in smaliFiles) pool.withResource(() => patchSmali(file)),
-    pool.withResource(patchJson),
+    pool.withResource(patchJson).then(patchGameSettingsJson),
     pool.withResource(patchAndroidManifest),
   ]);
   await pool.close();

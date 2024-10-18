@@ -3,13 +3,64 @@ import 'dart:io';
 
 typedef JsonMap = Map<String, dynamic>;
 
-Future<void> patchJson() async {
+Future<void> patchGameSettingsJson(String? gameSettingsJson) async {
+  if (gameSettingsJson == null) {
+    print('Could not patch getGameSettingsJson()');
+    return;
+  }
+
+  final smaliFile = await Process.run('grep', [
+    '--include=*.smali',
+    '-Rl',
+    'original/',
+    '-e',
+    // '".method public final getGameSettingsJson()Ljava/lang/String;"',
+    'method public final getGameSettingsJson',
+  ]).then((result) => File(result.stdout.trim()));
+  print('Patching getGameSettingsJson in $smaliFile...');
+
+  final lines = await smaliFile.readAsLines();
+  int bodyStart = -1;
+  int bodyEnd = -1;
+  for (int i = 0; i < lines.length; i++) {
+    final line = lines[i];
+
+    if (line.trim() ==
+        '.method public final getGameSettingsJson()Ljava/lang/String;') {
+      bodyStart = i + 1;
+    } else if (line.trim() == '.end method' && bodyStart != -1) {
+      bodyEnd = i;
+      break;
+    }
+  }
+
+  if (bodyStart == -1 || bodyEnd == -1) {
+    print('Failed to find getGameSettingsJson in $smaliFile');
+    return;
+  }
+
+  lines.removeRange(bodyStart, bodyEnd);
+  lines.insertAll(bodyStart, [
+    '    .locals 1',
+    '    ',
+    // Here we jsonEncode the string to wrap it in quotes
+    '    const-string v0, ${jsonEncode(gameSettingsJson)}',
+    '    ',
+    '    return-object v0',
+  ]);
+
+  await smaliFile.writeAsString(lines.join('\n'));
+  print('Patched getGameSettingsJson in $smaliFile');
+}
+
+/// Returns the game_settings json as a string
+Future<String?> patchJson() async {
   final File jsonFile;
   try {
     jsonFile = await _findJsonFile();
   } catch (e) {
     print(e);
-    return;
+    return null;
   }
   final json = await jsonFile.readAsString().then(jsonDecode) as JsonMap;
 
@@ -105,6 +156,8 @@ Future<void> patchJson() async {
 
   print('Patching game_settings in $jsonFile...');
   await jsonFile.writeAsString(jsonEncode(json));
+
+  return jsonEncode(json['game_settings']);
 }
 
 Future<File> _findJsonFile() async {
