@@ -128,10 +128,10 @@ Future<File> _findJsonFile() async {
 void _patchArenaConfig(JsonMap arenaConfig) {
   arenaConfig['challengeAttemptsCount'] = 50; // from 5
   for (final rewardGroup in [
-    ...(arenaConfig['dailyArenaRewards'] as List<JsonMap>),
-    ...(arenaConfig['seasonArenaRewards'] as List<JsonMap>),
+    ...(arenaConfig['dailyArenaRewards'] as List),
+    ...(arenaConfig['seasonArenaRewards'] as List),
   ]) {
-    final rewards = rewardGroup['rewards'] as List<JsonMap>;
+    final rewards = rewardGroup['rewards'] as List;
     for (final reward in rewards) {
       // { "key": "currency", "amount": 2000, "rarity": 1, "currencyType": 7 }
       reward['amount'] = (reward['amount'] as int) * 10;
