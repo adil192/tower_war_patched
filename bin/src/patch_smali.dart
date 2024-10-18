@@ -176,18 +176,17 @@ final _trueMethods = [
   'isPremium',
   'getRateAppStatus',
   'eligibleQueryPurchaseHistory',
-  'showRewarded',
   'showInterstitial',
   'showInterstitialWithPopup',
   if (packageName == 'games.vaveda.militaryoverturn') 'isActiveNetworkMetered',
+  'isRewardedAvailable',
+  'isRewardedPlacementAvailable',
 ];
 
 /// Known methods we want to replace with
 /// [MethodBodies.returnFalse]
 final _falseMethods = [
   'isInterstitialAvailable',
-  'isRewardedAvailable',
-  'isRewardedPlacementAvailable',
   'showCustomRateAppPopup',
   'showRateAppPopup',
   'isRooted',
@@ -206,14 +205,25 @@ final _bigNumberMethods = [
 
 final _otherMethods = <String, (String methodSuffix, List<String> body)>{
   if (packageName == 'games.vaveda.militaryoverturn')
-    'getNetworkTypeFromConnectivityManager': (')I', MethodBodies.returnZero),
+    'getNetworkTypeFromConnectivityManager': (
+      ')I',
+      MethodBodies.returnZero,
+    ),
   if (packageName == 'games.vaveda.militaryoverturn')
     'getActiveNetworkInfo': (
       ')Landroid/net/NetworkInfo;',
-      MethodBodies.returnNull
+      MethodBodies.returnNull,
     ),
   if (packageName == 'games.vaveda.militaryoverturn')
-    'getConnectionType': (')Ljava/lang/String;', MethodBodies.returnZeroString),
+    'getConnectionType': (
+      ')Ljava/lang/String;',
+      MethodBodies.returnZeroString,
+    ),
+  if (packageName == 'games.vaveda.militaryoverturn')
+    'showRewarded': (
+      'Lsaygames/saykit/SayKitRewardedClosedCallback;)Z',
+      MethodBodies.grantRewardAndReturnTrue,
+    ),
 };
 
 /// We want to inject some code into the beginning

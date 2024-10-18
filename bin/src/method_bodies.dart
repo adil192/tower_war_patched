@@ -54,6 +54,17 @@ abstract class MethodBodies {
     '    return-object v0',
   ];
 
+  /// Instead of showing an ad, directly invoke the callback as if the ad was watched successfully
+  static const grantRewardAndReturnTrue = [
+    '    .locals 1',
+    '    ',
+    '    const/4 v0, 0x1',
+    '    ',
+    '    invoke-interface {p1, v0}, Lsaygames/saykit/SayKitRewardedClosedCallback;->onRewardedClosed(Z)V',
+    '    ',
+    '    return v0',
+  ];
+
   /// Equivalent to the method body of the original `enablePremium` method
   /// in `smali_classes7/saygames/bridge/unity/SayKitBridge.smali`.
   ///
