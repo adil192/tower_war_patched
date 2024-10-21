@@ -153,7 +153,7 @@ Future<String?> patchJson() async {
   final tokensUpgradeList =
       jsonDecode(json['game_settings']['tokens_upgrade_list']) as List;
   for (final upgrade in tokensUpgradeList) {
-    upgrade['NeedToken'] = 0;
+    upgrade['NeedToken'] = 1;
   }
   json['game_settings']['tokens_upgrade_list'] = jsonEncode(tokensUpgradeList);
 
