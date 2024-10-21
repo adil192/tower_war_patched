@@ -161,7 +161,7 @@ Future<String?> patchJson() async {
 }
 
 Future<File> _findJsonFile() async {
-  final expectedFile = File('original/assets/saykit_mlltrna_1.19.1.json');
+  final expectedFile = File('original/assets/saykit_mlltrna_1.23.3.json');
   if (expectedFile.existsSync()) return expectedFile;
 
   await for (var entity in Directory('original/assets/').list()) {

@@ -40,9 +40,7 @@ Future<void> patchSmali(File file) async {
 
   line_loop:
   for (int i = 0; i < lines.length; i++) {
-    final line = lines[i].replaceAll('disablePremium', 'enablePremium').replaceAll(
-        'invoke-static {}, Ljava/net/NetworkInterface;->getNetworkInterfaces()Ljava/util/Enumeration;',
-        'invoke-static {}, Ljava/util/Collections;->emptyEnumeration()Ljava/util/Enumeration;');
+    final line = lines[i].replaceAll('->disablePremium', '->enablePremium');
     if (line != lines[i]) {
       changed = true;
       print('Patched ${lines[i]} to $line');
@@ -153,16 +151,16 @@ Future<void> patchSmali(File file) async {
 /// [MethodBodies.returnVoid]
 final _voidMethods = [
   'loadInterstitialAd',
-  'loadRewardedAd',
-  'loadRewardedVideo',
-  'showAd',
-  'showFullscreenAd',
+  // 'loadRewardedAd',
+  // 'loadRewardedVideo',
+  // 'showAd',
+  // 'showFullscreenAd',
   'showInterstitial',
   'showInterstitialAd',
-  'showRewardedAd',
-  'showRewardedVideo',
-  'showRewardedVideoAd',
-  'showRewardedInterstitialAd',
+  // 'showRewardedAd',
+  // 'showRewardedVideo',
+  // 'showRewardedVideoAd',
+  // 'showRewardedInterstitialAd',
   'showAppOpenAd',
   'showBanner',
   'setPremium',
@@ -178,9 +176,8 @@ final _trueMethods = [
   'eligibleQueryPurchaseHistory',
   'showInterstitial',
   'showInterstitialWithPopup',
-  if (packageName == 'games.vaveda.militaryoverturn') 'isActiveNetworkMetered',
-  'isRewardedAvailable',
-  'isRewardedPlacementAvailable',
+  // 'isRewardedAvailable',
+  // 'isRewardedPlacementAvailable',
   'getDisableAutoBanner',
   'getDisableBanner',
   'getDisableInterstitial',
@@ -196,7 +193,6 @@ final _falseMethods = [
   'isEmulator',
   'isDebuggerAttached',
   'isAppDebuggable',
-  if (packageName == 'games.vaveda.militaryoverturn') 'isNetworkConnected',
 ];
 
 /// Known methods that we want to replace with
@@ -206,28 +202,7 @@ final _bigNumberMethods = [
   'getSubscriptionExpirationTimestamp',
 ];
 
-final _otherMethods = <String, (String methodSuffix, List<String> body)>{
-  if (packageName == 'games.vaveda.militaryoverturn')
-    'getNetworkTypeFromConnectivityManager': (
-      ')I',
-      MethodBodies.returnZero,
-    ),
-  if (packageName == 'games.vaveda.militaryoverturn')
-    'getActiveNetworkInfo': (
-      ')Landroid/net/NetworkInfo;',
-      MethodBodies.returnNull,
-    ),
-  if (packageName == 'games.vaveda.militaryoverturn')
-    'getConnectionType': (
-      ')Ljava/lang/String;',
-      MethodBodies.returnZeroString,
-    ),
-  if (packageName == 'games.vaveda.militaryoverturn')
-    'showRewarded': (
-      'Lsaygames/saykit/SayKitRewardedClosedCallback;)Z',
-      MethodBodies.grantRewardAndReturnTrue,
-    ),
-};
+final _otherMethods = <String, (String methodSuffix, List<String> body)>{};
 
 /// We want to inject some code into the beginning
 /// of the existing method body.
