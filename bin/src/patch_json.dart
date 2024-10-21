@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 typedef JsonMap = Map<String, dynamic>;
 
@@ -81,7 +82,7 @@ Future<String?> patchJson() async {
 
   final goldChest = jsonDecode(json['game_settings']['gold_chest']) as JsonMap;
   goldChest['ChestPrice'] = 6; // from 60
-  goldChest['TimeForFreeChest'] = 43200; // 12 hours from never
+  goldChest['TimeForFreeChest'] = 3600; // 1 hour from never
   json['game_settings']['gold_chest'] = jsonEncode(goldChest);
   json['game_settings']['open_ten_chests_price'] = 54; // from 540
 
@@ -114,12 +115,17 @@ Future<String?> patchJson() async {
   json['game_settings']['show_bomb_button_free_count'] = 1000000; // from 0
   json['game_settings']['show_bomb_price'] = 50; // from 250
 
+  final shopDailyRewards =
+      jsonDecode(json['game_settings']['shop_daily_rewards']) as JsonMap;
+  shopDailyRewards['Period'] = 600; // from 86400
+  json['game_settings']['shop_daily_rewards'] = jsonEncode(shopDailyRewards);
+
   final itemsOffer =
       jsonDecode(json['game_settings']['show_items_offer_in_shop']) as JsonMap;
   itemsOffer['IsEnable'] = 1; // from 0
   for (final offer in itemsOffer['ArtefactsOfferConfigJsonData']) {
-    offer['GoldPrice'] = (offer['GoldPrice'] as int) ~/ 10;
-    offer['RubyPrice'] = (offer['RubyPrice'] as int) ~/ 10;
+    offer['GoldPrice'] = min(offer['GoldPrice'] as int, 500);
+    offer['RubyPrice'] = min(offer['RubyPrice'] as int, 8);
   }
   json['game_settings']['show_items_offer_in_shop'] = jsonEncode(itemsOffer);
 
@@ -131,7 +137,7 @@ Future<String?> patchJson() async {
   final silverChest =
       jsonDecode(json['game_settings']['silver_chest']) as JsonMap;
   silverChest['ChestPrice'] = 2; // from 15
-  silverChest['TimeForFreeChest'] = 3600; // 1 hour from 24 hours
+  silverChest['TimeForFreeChest'] = 600; // 10 minutes from 24 hours
   json['game_settings']['silver_chest'] = jsonEncode(silverChest);
 
   final spinRewardList =
