@@ -42,16 +42,10 @@ Future<void> prereq() async {
   await refactorApk(originalApkFile);
 }
 
-Future<void> cleanup() async {
-  if (decompiledDir.existsSync()) {
-    print('Cleaning up old files...');
-    await decompiledDir.delete(recursive: true);
-  }
-}
-
 Future<void> decompile() async {
   print('Decompiling original.apk...');
-  final process = await Process.start('apktool', ['d', originalApkFile.path]);
+  final process =
+      await Process.start('apktool', ['d', originalApkFile.path, '-f']);
   stdout.addStream(process.stdout);
   stderr.addStream(process.stderr);
   await process.exitCode;
@@ -118,7 +112,6 @@ void main(List<String> arguments) async {
   final stopwatch = Stopwatch()..start();
 
   await prereq();
-  await cleanup();
   await decompile();
   packageName = File('original/AndroidManifest.xml')
       .readAsStringSync()
