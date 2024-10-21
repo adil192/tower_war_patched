@@ -3,6 +3,9 @@ import 'dart:io';
 
 typedef JsonMap = Map<String, dynamic>;
 
+final jsonEncoder = JsonEncoder.withIndent('  ');
+String jsonEncode(Object? value) => jsonEncoder.convert(value);
+
 Future<void> patchGameSettingsJson(String? gameSettingsJson) async {
   if (gameSettingsJson == null) {
     print('Could not patch getGameSettingsJson()');
