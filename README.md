@@ -1,6 +1,11 @@
-A patching script built to remove the forced fullscreen ads
-from the "Tower War" game, though in theory it could work
-for many (un-minified) Android games.
+An automatic patching script for (almost) any Android game:
+- Removes forced ads (interstitial and banner ads) but keeps rewarded ads (like "Watch this video to get 3x coins")
+- Removes (basic) root checks
+
+When used on the "Tower War" game, you get all of the above and:
+- Removes Play Store rating popups
+- Makes most items cost less
+- Increases rewards and makes random items better
 
 ## Prerequisites
 
